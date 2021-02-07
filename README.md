@@ -18,6 +18,21 @@ legend(2, .3, c("Cohort1 Zanu Arm (n=102)","Cohort1 Ibru Arm (n=99)","Cohort2 (n
 abline (v=10, col="gray")# add line
 
 
+#calculate and plot Odds ratio for MRR/VGPR
+data=read.delim("Binghao/input/BGB_3111_302/Oddsratio_MYD88WT.txt",head=T,sep="\t")
+output=matrix(ncol=3,nrow=nrow(data)/2)
+j=1
+for (i in seq(1,nrow(data),by=2)) {
+  #input=matrix(c(data[i,2],data[i+1,2],data[i,3],data[i+1,3]),nrow=2,byrow=F) #for MRR
+  input=matrix(c(data[i,4],data[i+1,4],data[i,5],data[i+1,5]),nrow=2,byrow=F) #for VGPR
+Oddsratio=((input[1,1])/(input[2,1]))/((input[1,2])/(input[2,2])) #calculate oddratio
+pvalue=fisher.test(input) #calculate fisher exact test
+output[j,1]=pvalue$p.value
+output[j,2]=Oddsratio
+j=j+1
+}
+write.csv(output,"Binghao/output.csv")
+
 
 
 
